@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, memo } from "react";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
 import CheckBox from "@material-ui/core/Checkbox";
@@ -8,25 +8,21 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import useToggle from "./hooks/useToggle";
 import EditTodo from "./editTodo";
-const Todo = ({
-  id,
-  todo,
-  completed,
-  removeTodo,
-  handleToggle,
-  handleEdit,
-}) => {
+import { DispatchContext } from "./contexts/todos.contex";
+const Todo = ({ id, todo, completed }) => {
+  const dispatch = useContext(DispatchContext);
   const [isEditing, Toggle] = useToggle();
+  console.log("render");
   return (
     <ListItem style={{ height: "64px" }}>
       {isEditing ? (
-        <EditTodo handleEdit={handleEdit} id={id} task={todo} toggle={Toggle} />
+        <EditTodo id={id} task={todo} toggle={Toggle} />
       ) : (
         <>
           <CheckBox
             tabIndex={-1}
             checked={completed}
-            onClick={() => handleToggle(id)}
+            onClick={() => dispatch({ type: "toggle", id: id })}
             size="small"
           />
           <ListItemText
@@ -38,7 +34,10 @@ const Todo = ({
           </ListItemText>
           <ListItemSecondaryAction>
             <IconButton aria-label="Delete">
-              <DeleteIcon onClick={() => removeTodo(id)} fontSize="small" />
+              <DeleteIcon
+                onClick={() => dispatch({ type: "remove", id: id })}
+                fontSize="small"
+              />
             </IconButton>
             <IconButton aria-label="Edit">
               <EditIcon fontSize="small" onClick={() => Toggle(id)} />
@@ -50,4 +49,4 @@ const Todo = ({
   );
 };
 
-export default Todo;
+export default memo(Todo);

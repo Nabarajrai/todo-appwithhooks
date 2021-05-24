@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import TextField from "@material-ui/core/TextField";
 import useInputState from "./hooks/useInputState";
+import { DispatchContext } from "./contexts/todos.contex";
 
-const EditTodo = ({ handleEdit, id, task, toggle }) => {
+const EditTodo = ({ id, task, toggle }) => {
+  const dispatch = useContext(DispatchContext);
   const [value, handleChange, reSet] = useInputState(task);
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleEdit(id, value);
+    dispatch({ type: "edit", id: id, newTask: value });
     reSet();
     toggle();
   };

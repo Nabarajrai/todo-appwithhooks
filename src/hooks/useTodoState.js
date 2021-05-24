@@ -1,27 +1,27 @@
 import { v4 as uuidv4 } from "uuid";
 import useLocalStorage from "./useLocalStorage";
 const useTodoState = (initialVal) => {
-  const [todo, setTodos] = useLocalStorage("todo ", initialVal);
+  const [todos, setTodos] = useLocalStorage("todo ", initialVal);
   return {
-    todo,
+    todos,
     addTodo: (newTaskTodo) => {
       setTodos([
-        ...todo,
+        ...todos,
         { id: uuidv4(), task: newTaskTodo, completed: false },
       ]);
     },
     removeTodo: (todoId) => {
-      const updateTodo = todo.filter((todos) => todos.id !== todoId);
+      const updateTodo = todos.filter((todos) => todos.id !== todoId);
       setTodos(updateTodo);
     },
     handleToggle: (todoId) => {
-      const updateTodos = todo.map((todos) =>
+      const updateTodos = todos.map((todos) =>
         todos.id === todoId ? { ...todos, completed: !todos.completed } : todos
       );
       setTodos(updateTodos);
     },
     editTodo: (todoId, newTask) => {
-      const updateTodos = todo.map((todos) =>
+      const updateTodos = todos.map((todos) =>
         todos.id === todoId ? { ...todos, task: newTask } : todos
       );
       setTodos(updateTodos);
